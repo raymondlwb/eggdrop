@@ -63,6 +63,10 @@ int logmodes(char *s)
     case 'B':
       res |= LOG_BOTS;
       break;
+    case 'i':
+    case 'I':
+      res |= LOG_BOTMSG;
+      break;
     case 'r':
     case 'R':
       res |= raw_log ? LOG_RAW : 0;
@@ -128,7 +132,7 @@ int logmodes(char *s)
 
 char *masktype(int x)
 {
-  static char s[24];            /* Change this if you change the levels */
+  static char s[25];            /* Change this if you change the levels */
   char *p = s;
 
   if (x & LOG_MSGS)
@@ -145,6 +149,8 @@ char *masktype(int x)
     *p++ = 'o';
   if (x & LOG_BOTS)
     *p++ = 'b';
+  if (x & LOG_BOTMSG)
+    *p++ = 'i';
   if ((x & LOG_RAW) && raw_log)
     *p++ = 'r';
   if (x & LOG_FILES)
@@ -185,7 +191,7 @@ char *masktype(int x)
 
 char *maskname(int x)
 {
-  static char s[207];           /* Change this if you change the levels */
+  static char s[224];           /* Change this if you change the levels */
   int i = 0;
 
   s[0] = 0;
@@ -203,6 +209,8 @@ char *maskname(int x)
     i += my_strcpy(s + i, "misc, ");
   if (x & LOG_BOTS)
     i += my_strcpy(s + i, "bots, ");
+  if (x & LOG_BOTMSG)
+    i += my_strcpy(s + i, "linked bot msgs, ");
   if ((x & LOG_RAW) && raw_log)
     i += my_strcpy(s + i, "raw, ");
   if (x & LOG_FILES)
